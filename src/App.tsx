@@ -10,7 +10,6 @@ import {
   Instagram,
   Twitter,
   Linkedin,
-  Github,
   Youtube,
   ExternalLink,
   Edit3,
@@ -66,13 +65,11 @@ const socialLinks = [
     url: "https://instagram.com",
     label: "Instagram",
   },
-
   {
     icon: <Linkedin className="w-6 h-6" />,
     url: "https://www.linkedin.com/in/parsaedalathami",
     label: "LinkedIn",
   },
-
   {
     icon: <Youtube className="w-6 h-6" />,
     url: "https://youtube.com",

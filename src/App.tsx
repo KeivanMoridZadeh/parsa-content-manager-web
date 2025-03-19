@@ -1,4 +1,5 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   ArrowRight,
   FileEdit,
@@ -9,107 +10,335 @@ import {
   Instagram,
   Twitter,
   Linkedin,
-  Mail,
-  MapPin,
-  Clock,
-  Calendar
-} from 'lucide-react';
-import Navbar from './components/Navbar';
-import Portfolio from './components/Portfolio';
-import About from './components/About';
-import ContactForm from './components/ContactForm';
+  Github,
+  Youtube,
+  ExternalLink,
+  Edit3,
+  Video,
+  Share2,
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
+  Check,
+  VolumeX,
+  Volume2,
+} from "lucide-react";
+import Navbar from "./components/Navbar";
+import Portfolio from "./components/Portfolio";
+import About from "./components/About";
+import ContactForm from "./components/ContactForm";
 
 const services = [
   {
-    icon: <FileEdit className="w-6 h-6" />,
-    title: "Content Strategy",
-    description: "Developing comprehensive content strategies that align with business goals. Achieved 150% increase in organic traffic through strategic content planning.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+    icon: <Edit3 className="w-6 h-6" />,
+    title: "Script Writing",
+    description:
+      "Crafting compelling narratives and scripts that captivate audiences and deliver your message effectively.",
+    image: "/assets/script-writing.jpg",
   },
   {
     icon: <MessageSquare className="w-6 h-6" />,
     title: "Content Creation",
-    description: "Creating engaging, SEO-optimized content that resonates with target audiences. Produced viral content reaching 1M+ views across platforms.",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80"
+    description:
+      "Creating engaging content that resonates with your target audience and drives meaningful engagement.",
+    image: "/assets/content-creation.jpg",
   },
   {
-    icon: <BarChart className="w-6 h-6" />,
-    title: "Digital Marketing & SEO",
-    description: "Implementing data-driven SEO strategies that boost visibility. Achieved 200% increase in search rankings for key terms.",
-    image: "https://images.unsplash.com/photo-1533750516457-a7f992034fec?auto=format&fit=crop&w=800&q=80"
+    icon: <Video className="w-6 h-6" />,
+    title: "Video Editing",
+    description:
+      "Professional video editing services that bring your stories to life with stunning visuals and seamless transitions.",
+    image: "/assets/video-editing.jpg",
   },
   {
-    icon: <Target className="w-6 h-6" />,
-    title: "Project Management",
-    description: "Managing content teams and projects from conception to delivery. Successfully led 50+ content campaigns for major brands.",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80"
-  }
+    icon: <Share2 className="w-6 h-6" />,
+    title: "Social Media Management",
+    description:
+      "Strategic social media management to grow your presence and engage with your audience effectively.",
+    image: "/assets/social-media.jpg",
+  },
+];
+
+const socialLinks = [
+  {
+    icon: <Instagram className="w-6 h-6" />,
+    url: "https://instagram.com",
+    label: "Instagram",
+  },
+
+  {
+    icon: <Linkedin className="w-6 h-6" />,
+    url: "https://www.linkedin.com/in/parsaedalathami",
+    label: "LinkedIn",
+  },
+
+  {
+    icon: <Youtube className="w-6 h-6" />,
+    url: "https://youtube.com",
+    label: "YouTube",
+  },
+];
+
+const imageSlides = [
+  // "public/assets/hero1.jpg",
+  "public/assets/hero2.jpg",
+  "public/assets/hero3.jpg",
+  "public/assets/hero4.jpg",
 ];
 
 function App() {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const [currentSlide, setCurrentSlide] = React.useState(-1);
+  const [isPlaying, setIsPlaying] = React.useState(true);
+  const [isMuted, setIsMuted] = React.useState(true);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.play().catch((error) => {
+        console.log("Video autoplay failed:", error);
+      });
+      setIsPlaying(true);
+    }
+  }, []);
+
+  const handleVideoEnd = () => {
+    // When video ends, move to the first image slide
+    setCurrentSlide(0);
+  };
+
+  const handlePrevSlide = () => {
+    if (currentSlide === -1) {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+    } else if (currentSlide === 0) {
+      setCurrentSlide(-1);
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+    } else {
+      setCurrentSlide((prev) => prev - 1);
+    }
+  };
+
+  const handleNextSlide = () => {
+    if (currentSlide === -1) {
+      setCurrentSlide(0);
+      if (videoRef.current) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    } else if (currentSlide < imageSlides.length - 1) {
+      setCurrentSlide((prev) => prev + 1);
+    } else {
+      setCurrentSlide(-1);
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      setIsMuted(!isMuted);
+      videoRef.current.muted = !isMuted;
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Navbar />
-      
+
       {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center overflow-hidden">
-        <motion.div
-          className="absolute inset-0 z-0"
-          style={{
-            y,
-            backgroundImage: "url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=1920&q=80')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "brightness(0.3)"
-          }}
-        />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl"
+      <section
+        id="home"
+        className="relative h-screen flex items-center overflow-hidden"
+      >
+        <div className="absolute inset-0 z-0">
+          {/* Video */}
+          <div
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{ opacity: currentSlide === -1 ? 1 : 0 }}
           >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
-              Elevating Brands Through
-              <span className="text-blue-500"> Strategic Content</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8">
-              Content strategist and digital storyteller helping businesses connect with their audience through compelling narratives and data-driven strategies.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <a
-                href="#contact"
-                className="inline-flex items-center px-6 py-3 bg-white text-gray-900 rounded-full hover:bg-gray-100 transition-colors"
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted={true}
+              loop={false}
+              className="w-full h-full object-cover"
+              style={{ filter: "brightness(0.3)" }}
+              onEnded={handleVideoEnd}
+            >
+              <source src="/assets/Video.mov" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          {/* Image Slider */}
+          <div className="absolute inset-0">
+            {imageSlides.map((src, index) => (
+              <motion.div
+                key={index}
+                className="absolute inset-0 transition-opacity duration-1000"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: currentSlide === index ? 1 : 0 }}
+                transition={{ duration: 1 }}
               >
-                Start Your Project
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
-              <a
-                href="#services"
-                className="inline-flex items-center px-6 py-3 border-2 border-white text-white rounded-full hover:bg-white hover:text-gray-900 transition-colors"
+                <img
+                  src={src}
+                  alt={`Slide ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  style={{ filter: "brightness(0.3)" }}
+                />
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Navigation Controls */}
+          <div className="absolute bottom-10 right-10 z-20">
+            {currentSlide === -1 && (
+              <button
+                onClick={toggleMute}
+                className="p-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all"
               >
-                Explore Services
-              </a>
-            </div>
-          </motion.div>
+                {isMuted ? (
+                  <VolumeX className="w-6 h-6 text-white" />
+                ) : (
+                  <Volume2 className="w-6 h-6 text-white" />
+                )}
+              </button>
+            )}
+          </div>
+
+          {/* Slide Indicators */}
+          <div className="absolute bottom-20 left-0 right-0 z-20 flex justify-center gap-2">
+            <button
+              onClick={() => {
+                setCurrentSlide(-1);
+                if (videoRef.current) {
+                  videoRef.current.currentTime = 0;
+                  videoRef.current.play();
+                  setIsPlaying(true);
+                }
+              }}
+              className={`w-2 h-2 rounded-full transition-all ${
+                currentSlide === -1 ? "bg-white w-6" : "bg-white/50"
+              }`}
+            />
+            {imageSlides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  currentSlide === index ? "bg-white w-6" : "bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Left side - content */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-left -ml-16"
+            >
+              <motion.h1
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+              >
+                Elevating Brands Through
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+                  {" "}
+                  Strategic Content
+                </span>
+              </motion.h1>
+              <motion.p
+                className="text-lg md:text-xl text-gray-200 mb-8"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+              >
+                Content strategist and digital storyteller helping businesses
+                connect with their audience through compelling narratives and
+                data-driven strategies.
+              </motion.p>
+              <motion.div
+                className="flex flex-wrap gap-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+              >
+                <a
+                  href="#services"
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 text-sm md:text-base"
+                >
+                  Explore Services
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+                <a
+                  href="#portfolio"
+                  className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-full hover:bg-white/20 transition-all transform hover:scale-105 text-sm md:text-base"
+                >
+                  View Portfolio
+                </a>
+              </motion.div>
+            </motion.div>
+
+            {/* Right side - empty space */}
+            <div className="hidden md:block"></div>
+          </div>
         </div>
       </section>
 
+      {/* About Section */}
+      <About />
+
       {/* Services Section */}
-      <section id="services" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        id="services"
+        className="py-20 bg-gradient-to-b from-gray-50 to-white"
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              What I <span className="text-blue-500">Do</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive content management solutions that drive engagement and deliver results
-            </p>
+            <motion.h2
+              className="text-4xl md:text-5xl font-bold mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              What I{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">
+                Do
+              </span>
+            </motion.h2>
+            <motion.p
+              className="text-xl text-gray-600 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              Comprehensive content management solutions that drive engagement
+              and deliver results
+            </motion.p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -118,30 +347,89 @@ function App() {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
               >
-                <div className="aspect-w-16 aspect-h-9">
+                <div className="relative overflow-hidden">
                   <img
                     src={service.image}
                     alt={service.title}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-56 object-cover transform group-hover:scale-105 transition-transform duration-300"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
-                <div className="p-6">
-                  <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4">
+                <div className="p-8">
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-2xl flex items-center justify-center mb-6 transform -translate-y-16 group-hover:-translate-y-20 transition-transform duration-300">
                     {service.icon}
                   </div>
-                  <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-                  <p className="text-gray-600">{service.description}</p>
-                  <ul className="mt-4 space-y-2">
-                    {[1, 2, 3].map((_, i) => (
-                      <li key={i} className="flex items-center text-gray-600">
-                        <CheckCircle2 className="h-5 w-5 text-blue-600 mr-2" />
-                        Key achievement or feature
-                      </li>
-                    ))}
+                  <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
+                  <p className="text-gray-600 mb-6">{service.description}</p>
+                  <ul className="space-y-3">
+                    {index === 0 && (
+                      <>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Engaging storylines that captivate audiences
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          SEO-optimized content structure
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Clear and compelling messaging
+                        </li>
+                      </>
+                    )}
+                    {index === 1 && (
+                      <>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          High-quality video production
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Professional editing and effects
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Engaging visual storytelling
+                        </li>
+                      </>
+                    )}
+                    {index === 2 && (
+                      <>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Smooth transitions and effects
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Color grading and enhancement
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Professional sound design
+                        </li>
+                      </>
+                    )}
+                    {index === 3 && (
+                      <>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Strategic content planning
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Community engagement
+                        </li>
+                        <li className="flex items-center text-gray-600">
+                          <Check className="w-5 h-5 text-blue-500 mr-2" />
+                          Performance analytics
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </div>
               </motion.div>
@@ -153,103 +441,98 @@ function App() {
       {/* Portfolio Section */}
       <Portfolio />
 
-      {/* About Section */}
-      <About />
+      {/* Social Links Section */}
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Connect With Me
+            </h2>
+            <p className="text-gray-600">
+              Let's stay connected across all platforms
+            </p>
+          </motion.div>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-blue-500 opacity-[0.03] pointer-events-none" />
-        <div className="container mx-auto px-8 max-w-7xl">
-          <div className="grid md:grid-cols-12 gap-12 items-start">
-            {/* Left Column - 40% */}
-            <div className="md:col-span-5 space-y-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
+          <motion.div
+            className="flex flex-wrap justify-center gap-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            {socialLinks.map((social, index) => (
+              <motion.a
+                key={index}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <h2 className="text-5xl font-bold mb-4">
-                  Let's Create <span className="text-blue-500">Together</span>
-                </h2>
-                <p className="text-lg text-gray-600 mb-8">
-                  Transform your digital presence with strategic content that engages, converts, and drives results. Let's bring your vision to life.
-                </p>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-4 text-gray-700">
-                    <Mail className="h-5 w-5 text-blue-600" />
-                    <a href="mailto:hello@example.com" className="hover:text-blue-600 transition-colors">
-                      hello@example.com
-                    </a>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4 text-gray-700">
-                    <MapPin className="h-5 w-5 text-blue-600" />
-                    <span>New York, NY</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4 text-gray-700">
-                    <Clock className="h-5 w-5 text-blue-600" />
-                    <span>EST (UTC-5)</span>
-                  </div>
+                <div className="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center group-hover:shadow-xl transition-shadow">
+                  {social.icon}
                 </div>
-
-                <div className="mt-8">
-                  <button
-                    onClick={() => window.open('https://calendly.com')}
-                    className="inline-flex items-center px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 transition-colors"
-                  >
-                    <Calendar className="mr-2 h-5 w-5" />
-                    Schedule a Call
-                  </button>
-                </div>
-
-                <div className="mt-8 pt-8 border-t">
-                  <p className="text-sm text-gray-600 mb-4">Connect with me</p>
-                  <div className="flex space-x-6">
-                    <a
-                      href="#"
-                      className="text-gray-600 hover:text-blue-600 transition-colors transform hover:scale-110"
-                    >
-                      <Instagram className="h-6 w-6" />
-                    </a>
-                    <a
-                      href="#"
-                      className="text-gray-600 hover:text-blue-600 transition-colors transform hover:scale-110"
-                    >
-                      <Twitter className="h-6 w-6" />
-                    </a>
-                    <a
-                      href="#"
-                      className="text-gray-600 hover:text-blue-600 transition-colors transform hover:scale-110"
-                    >
-                      <Linkedin className="h-6 w-6" />
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Right Column - 60% */}
-            <div className="md:col-span-7 bg-white rounded-2xl shadow-lg p-8">
-              <ContactForm />
-            </div>
-          </div>
+                <span className="text-sm font-medium">{social.label}</span>
+              </motion.a>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-gray-900 text-white">
-        <div className="container mx-auto px-4 max-w-7xl">
+      <footer className="py-8 bg-gradient-to-b from-gray-900 to-black text-white">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="text-sm text-gray-400">
-              &copy; {new Date().getFullYear()} Your Content Pro. All rights reserved.
+              &copy; {new Date().getFullYear()} Your Content Pro. All rights
+              reserved.
             </div>
             <div className="flex justify-end space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+              <a
+                href="#"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="#"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Terms of Service
+              </a>
             </div>
+          </div>
+          <div className="flex space-x-6">
+            <a
+              href="https://www.linkedin.com/in/parsaedalathami"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-blue-500 transition-colors"
+            >
+              <Linkedin className="w-6 h-6" />
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-pink-500 transition-colors"
+            >
+              <Instagram className="w-6 h-6" />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-blue-400 transition-colors"
+            >
+              <Twitter className="w-6 h-6" />
+            </a>
           </div>
         </div>
       </footer>

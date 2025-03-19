@@ -2,23 +2,14 @@ import React, { useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   ArrowRight,
-  FileEdit,
-  BarChart,
   MessageSquare,
-  Target,
-  CheckCircle2,
   Instagram,
   Twitter,
   Linkedin,
   Youtube,
-  ExternalLink,
   Edit3,
   Video,
   Share2,
-  ChevronLeft,
-  ChevronRight,
-  Pause,
-  Play,
   Check,
   VolumeX,
   Volume2,
@@ -78,13 +69,12 @@ const socialLinks = [
 ];
 
 const imageSlides = [
-  // "/assets/hero1.jpg",
   "/assets/hero2.jpg",
   "/assets/hero3.jpg",
   "/assets/hero4.jpg",
 ];
 
-function App() {
+const App = () => {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const [currentSlide, setCurrentSlide] = React.useState(-1);
@@ -535,6 +525,6 @@ function App() {
       </footer>
     </div>
   );
-}
+};
 
 export default App;

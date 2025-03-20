@@ -495,47 +495,7 @@ const App = () => {
             <div className="text-sm text-gray-400">
               &copy; {new Date().getFullYear()} Your Content Pro. All rights
               reserved.
-            </div>
-            <div className="flex justify-end space-x-6 text-sm">
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Terms of Service
-              </a>
-            </div>
-          </div>
-          <div className="flex space-x-6">
-            <a
-              href="https://www.linkedin.com/in/parsaedalathami"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-blue-500 transition-colors"
-            >
-              <Linkedin className="w-6 h-6" />
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-pink-500 transition-colors"
-            >
-              <Instagram className="w-6 h-6" />
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-blue-400 transition-colors"
-            >
-              <Twitter className="w-6 h-6" />
-            </a>
+            </div>          
           </div>
         </div>
       </footer>

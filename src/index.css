@@ -1,22 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Space+Mono&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Space+Mono&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-  
   body {
-    font-family: theme('fontFamily.sans');
-    color: theme('colors.gray.900');
-    background-color: theme('colors.white');
+    font-family: theme("fontFamily.sans");
+    color: theme("colors.gray.900");
+    background-color: theme("colors.white");
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: theme('fontFamily.display');
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: theme("fontFamily.display");
   }
 
   input[type="text"],
@@ -24,55 +29,60 @@
   input[type="number"],
   textarea {
     appearance: none;
-    background-color: theme('colors.white');
+    background-color: theme("colors.white");
   }
 }
 
 @layer components {
   .section-padding {
-    padding-top: theme('spacing.16');
-    padding-bottom: theme('spacing.16');
-    @media (min-width: theme('screens.md')) {
-      padding-top: theme('spacing.24');
-      padding-bottom: theme('spacing.24');
+    padding-top: theme("spacing.16");
+    padding-bottom: theme("spacing.16");
+    @media (min-width: theme("screens.md")) {
+      padding-top: theme("spacing.24");
+      padding-bottom: theme("spacing.24");
     }
-    @media (min-width: theme('screens.lg')) {
-      padding-top: theme('spacing.32');
-      padding-bottom: theme('spacing.32');
+    @media (min-width: theme("screens.lg")) {
+      padding-top: theme("spacing.32");
+      padding-bottom: theme("spacing.32");
     }
   }
-  
+
   .container-padding {
-    padding-left: theme('spacing.4');
-    padding-right: theme('spacing.4');
-    @media (min-width: theme('screens.sm')) {
-      padding-left: theme('spacing.6');
-      padding-right: theme('spacing.6');
+    padding-left: theme("spacing.4");
+    padding-right: theme("spacing.4");
+    @media (min-width: theme("screens.sm")) {
+      padding-left: theme("spacing.6");
+      padding-right: theme("spacing.6");
     }
-    @media (min-width: theme('screens.lg')) {
-      padding-left: theme('spacing.8');
-      padding-right: theme('spacing.8');
+    @media (min-width: theme("screens.lg")) {
+      padding-left: theme("spacing.8");
+      padding-right: theme("spacing.8");
     }
   }
 
   .text-gradient {
     background-clip: text;
     color: transparent;
-    background-image: linear-gradient(to right, theme('colors.primary.600'), theme('colors.accent.600'));
+    background-image: linear-gradient(
+      to right,
+      theme("colors.primary.600"),
+      theme("colors.accent.600")
+    );
   }
 
   .hover-link {
     position: relative;
   }
   .hover-link:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
-    height: theme('spacing.0.5');
+    height: theme("spacing.0.5");
     width: 0;
     background-color: currentColor;
-    transition: all theme('transitionDuration.300') theme('transitionTimingFunction.ease-out');
+    transition: all theme("transitionDuration.300")
+      theme("transitionTimingFunction.ease-out");
   }
   .hover-link:hover:after {
     width: 100%;

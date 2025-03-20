@@ -13,6 +13,10 @@ import {
   Check,
   VolumeX,
   Volume2,
+  Pause,
+  Play,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Navbar from "./components/Navbar";
 import Portfolio from "./components/Portfolio";
@@ -142,6 +146,17 @@ const App = () => {
     }
   };
 
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Navbar />
@@ -160,7 +175,6 @@ const App = () => {
             <video
               ref={videoRef}
               autoPlay
-              playsInline
               muted={true}
               loop={false}
               className="w-full h-full object-cover"
@@ -242,7 +256,7 @@ const App = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-left -ml-16"
+              className="text-left -ml-8"
             >
               <motion.h1
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
@@ -250,11 +264,10 @@ const App = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
               >
-                Elevating Brands Through
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-                  {" "}
                   Strategic Content
-                </span>
+                </span>{" "}
+                Through Brand Elevation
               </motion.h1>
               <motion.p
                 className="text-lg md:text-xl text-gray-200 mb-8"
@@ -267,7 +280,7 @@ const App = () => {
                 data-driven strategies.
               </motion.p>
               <motion.div
-                className="flex flex-wrap gap-4"
+                className="flex flex-wrap gap-4 justify-start"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
@@ -276,8 +289,8 @@ const App = () => {
                   href="#services"
                   className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 text-sm md:text-base"
                 >
-                  Explore Services
                   <ArrowRight className="ml-2 h-4 w-4" />
+                  Explore Services
                 </a>
                 <a
                   href="#portfolio"
@@ -429,7 +442,10 @@ const App = () => {
       <Portfolio />
 
       {/* Social Links Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <section
+        id="contact"
+        className="py-20 bg-gradient-to-b from-white to-gray-50"
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <motion.div
             className="text-center mb-12"
